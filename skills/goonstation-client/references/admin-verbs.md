@@ -1,0 +1,418 @@
+# goonstation's admin verbs
+
+The admin verbs of a recent goonstation, by the admin tab the stat panel shows them in (the tabs
+start with a flag character), as a map of what exists. Forks add, rename and remove verbs:
+`verbs {filter: "..."}` shows what this server has, with the exact name to type and the argument
+types. In the source, the lists of verbs per admin level are in `code/modules/admin/admin_verbs.dm`,
+and `grep -rn 'set name = "Verb Name"' code/` finds a verb's code.
+
+How they take arguments:
+
+- The arguments in brackets are ordinary verb arguments. Give them on the command line
+  (`command {line: "Jump-to-Coord 120 95 1"}`, `command {line: "Spawn /obj/item/rcd"}`) or with
+  `call_verb {name, args: [...]}` (`{object_id, kind}` for a mob or object).
+- Leave one out and the client asks for it in its own box: `answer_prompt` (a choice by name,
+  part of one or a number; `in world` lists only what the client knows).
+- Verbs without arguments open alerts, input boxes or panels as they go: `answer_alert`,
+  `answer_prompt`, `tgui_act`, `windows` and `topic`.
+
+The most useful ones are in [admin-cookbook.md](admin-cookbook.md).
+
+## Self
+
+- **Adventure View**: When toggled on, you will be able to see all 'hidden' adventure elements regardless of your current mob.
+- **Alternate Key**: Shows your key as something else!
+- **Build Mode**: Toggle build Mode on/off.
+- **Change Admin Preferences**
+- **Create Viewport**: Creates a cute little popout window to let you monitor an area, just like how AIs can.
+- **Create Viewport Following**: Creates a viewport that follows a selected atom.
+- **Enable Drunk Mode**: Are you drunk and slightly responsible still? Turn this on!
+- **Gibself**
+- **Jump** `(area/A as null|area in by_type[/area])`: Area to jump to
+- **Jump to Coord** `(x = 1 as num, y = 1 as num, z = 1 as num)`: Jump to a coordinate in world (x, y, z)
+- **Remove Self**: Simply removes you from existence
+- **Reset Build Mode**: If your build mode save got screwed up use this to reset it!
+- **Respawn As** `(client/cli in clients)`: Respawn yourself as the currently loaded character of a player. Instantly. Right where you stand.
+- **Respawn As Job** `(datum/job/J in (job_controls.staple_jobs|job_controls.special_jobs|job)`: Respawn yourself as a given job. Instantly. Right where you stand.
+- **Respawn As New Self**: Respawn yourself as your currently loaded character. Instantly. Right where you stand.
+- **Respawn As Self**: Respawn yourself as your currently loaded character or the character you removed with remove-self. Instantly. 
+- **Respawn Cinematic**: Respawn yourself with a special effect
+- **Respawn List of Players**: Respawn the provided list of players.
+- **Respawn Self**: Respawn yourself
+- **Retreat To Office**: Retreat to my office at centcom.
+- **Set Invisible**
+- **Set Observe**
+- **Set Play**
+- **Show Mining Map**: Show the Z5 Mining Zlevel map.
+- **Stealth Mode**
+- **Summon Office**: Expand your domain across dimensional planes.
+- **Swap Bodies With** `(mob/M)`: Swaps yours and the other person's bodies around.
+- **Toggle Atom Verbs**
+- **Toggle Buildmode View**: Toggles if buildmode changes your view
+- **Toggle Extra Verbs**
+- **Toggle Flourish Mode**: Toggles Your Flourish Mode
+- **Toggle Ghost Interaction**
+- **Toggle Hearing Prayers**: Toggles if you can hear prayers or not
+- **Toggle Lighting**: Toggle lighting on or off for yourself only.
+- **Toggle Offline Indicators**: Toggles if your offline indicators are hidden when mob jumping
+- **Toggle Player mode**: Disables most admin messages.
+- **Toggle Server Toggles Tab**: Toggle all the crap in the Toggles (Server) tab so it should go away/show up.  in theory.
+- **Toggle View Range**: switches between 1x and custom views
+- **Toggle Your Godmode**
+- **Toggle Your Mob's Omnipresence**
+- **Toggle Your Noclip**: Fly through walls
+- **View Admin Minimap**: An admin view of any loaded Z-level with player locations
+
+## Players
+
+- **Add Ban**: Add a ban
+- **Admin Alert** `(mob/M as mob in world)`
+- **Ban Panel**
+- **Check Vehicle Occupant**
+- **Distribute Tokens**: Give all roundstart antagonists an antag token. For when you blown up server oops.
+- **Edit Module** `(mob/living/silicon/robot/M as mob in list_robots())`: Module editor! Woo!
+- **Forced Assignment Panel**: Designate jobs and antagonist roles for certain ckeys to force-spawn as.
+- **Jobban Panel** `(key as text)`
+- **Jump to Key** `(client/ckey in clients)`
+- **Notify Forced Assignment Holders**: Subtly message everyone who holds a forced assignment.
+- **Observe Next Player**: Observe the next living logged-in player in some unspecified order.
+- **Observe Random Player**: Observe a random living logged-in player.
+- **Pick Random Player**: Picks a random logged-in player and brings up their player panel.
+- **Player Panel**
+- **Popt Key** `(client/ckey in clients)`: Open the player options panel for a key.
+- **Remove Other** `(mob/M as mob in world)`: Remove some other dude from the mortal plain
+- **Set round req bypass** `(ckey as text)`: Set a flag for a specific ckey to allow them to bypass round requirements for jobs etc.
+- **Shamecube** `(mob/M as mob in world)`: Places the player in a windowed cube at your location
+- **Spawn All Of A Type**: Creates one of every subtype instance of a type at your loc.
+- **Transfer ABCU blueprints**: Transfer 
+- **Transfer Client To** `(mob/M)`: Transfer a client to the selected mob.
+- **Unshamecube** `(mob/M as mob in world)`: Mostly removes the shamecube someone is under
+- **View CompID List** `(C as text)`: View the list of observed computer IDs belonging to a key
+- **View Player Notes** `(target as text)`: View the notes for a current player's key.
+- **VPN whitelist add** `(vpnckey as text)`
+- **VPN whitelist remove** `(vpnckey as text)`
+- **Whitelist Add Temp** `(ckey as text)`: Temporarily whitelist a ckey (for this round only)
+- **Whodead**: Lookup everyone who's dead
+- **Whois** `(target as text)`: Lookup a player by string (can search: mob names, player keys and job titles)
+
+## Atom
+
+- **Add Component Type**: Adds a component to all atoms of a type.
+- **Count All** `(typename as text)`: Returns the number of all instances of a type that exist.
+- **Emag All**: Emags every atom. Every single one.
+- **Emag Type**: Emag all things under the path you specify.
+- **Find All** `(typename as text)`: Show the location of all instances of a type. Performance warning!!
+- **Find One** `(typename as text)`: Show the location of one instance of type.
+- **Find Thing** `(atom/A as null|anything in world)`: Show the location of an atom by name.
+- **Follow Thing** `(atom/target as mob|obj in world)`: It's like observing, but without that part where you see everything as the person you're observing. Move to ca
+- **Get Type**: Get all things under the path you specify. Don't give this /turf or /area stuff, it's not going to work.
+- **Remove All Labels**
+- **Remove Component Type**: Removes a component from all atoms of a type.
+- **Replace Type** `(typ_part = null as text|null, repl_typ_part = null as text|null)`: Replace all things of one type with another.
+- **Rotate All Atoms**: Rotates every atom. Every single one.
+- **Rotate Type**: Rotates all things under the path you specify.
+- **Scale All**: Scales every atom. Every single one.
+- **Scale Type**: Scales all things under the path you specify.
+- **Spin All**: Spins every atom. Every single one.
+- **Spin Type**: Spins all things under the path you specify.
+- **Transmute Type**: Transmute all things under the path you specify.
+
+## Fun
+
+- **Alert All Ghosts**: Send a notice to ghosts to observe a selected target.
+- **Ambient Viewer**: Ambient Viewer
+- **Animation Editor**: Animation Editor
+- **Announce**: Announce your desires to the world
+- **Blueprint Create**: Allows creation of blueprints of any user.
+- **Blueprint Delete**: Allows deletion of blueprints of any user.
+- **Bulk Spawn Artifacts**
+- **CA Viewer**: Cellular Automata Viewer
+- **Cat County**: We can't stop here!
+- **Change Mutant Race** `(mob/mob in world)`
+- **Command Report Panel**
+- **Create All Wizard Rings**: Spawn all of the magical wizard rings.
+- **Create Portal**
+- **Critter Creator (WIP)**
+- **Crusher Walls**
+- **Custom Ghost Spawn**: Set up a custom player spawn event.
+- **Custom Grenade**: Create a custom object spewing grenade
+- **Dectalk**: Sends a message as voice to all players
+- **Disco Lights**: Set every light on the station to a random color
+- **Event Controller**: Event Controller
+- **Expell Object From Mail Chutes**
+- **Fake Medal** `(msg as null|text)`: Creates a false medal message and shows it to someone, or everyone.
+- **Fake PDA Message To All**
+- **Flip View**: Rotates a client's viewport
+- **Force Say In Range**
+- **Get all Clients**: Teleports any mob with a client to you.
+- **Get all Human Mobs**
+- **Get all Mobs**
+- **Get all Non-Traitors**
+- **Get all Traitors**
+- **Give Player Pets** `(pet_input=null as text)`: Assigns every living player a pet! Enter part of the path of the thing you want to give.
+- **Heal All**
+- **Lights Out**: Force off all station lighting for a duration
+- **Make Shitty Weapon**: make some stupid junk, laugh
+- **Microbomb All**: Gives everyone a microbomb. You cannot undo this!!
+- **Move Lobby**
+- **Parallax Viewer**: Parallax Viewer
+- **Pixel explosion mode**: Makes everything you click on explode into pixels.
+- **Plain Message to All**
+- **Pop off everyone's limbs**: Oh christ no don't do this
+- **Recolor Syndicate**: Recolor (most) syndicate gear, mostly nukie gear.
+- **See No Evil**
+- **Send all Human Mobs** `(area/A in world)`
+- **Send all Mobs** `(area/A in world)`
+- **Show Image to All**
+- **Spawn Custom Transmutation Reagent**
+- **Special Shuttle**: Spawn in a special escape shuttle
+- **Terrainify**: Turns space into a terrain type
+- **Toggle Aggressive Debugging**: Makes triggering a runtime strike you with lightning. Yes really.
+- **Toggle All Artifacts**
+- **Toggle Forced Radio maptext**
+- **Toggle Mob Godmode** `(mob/M as mob in world)`
+- **Toggle Text Mode** `(client/C in clients)`: Makes a client see the game in ASCII vision.
+
+## Debug
+
+- **Advanced ProcCall**
+- **Alter Budget**: Add to or subtract from a budget.
+- **Aview**
+- **Call Proc All** `(typename as null|text)`: Call proc on all instances of a type, will probably slow shit down
+- **cause lag** `(a as num, b as num)`: Loops a times b times over some trivial statement.
+- **Change Admin Level**: Allows you to change your admin level at will for testing. Does not change your available verbs.
+- **Check Gang Scores**
+- **Clear Image Deletion Log**
+- **Clear String Cache**: Invalidates/clears the string cache to allow for files to be reloaded.
+- **Colorblind Testing**: Change your view to a budget version of colorblindness to test for usability
+- **Debug API Handler**: Toggle debug logging of API requests
+- **Debug Deletions**
+- **Debug Event Recorder**: Display debug information about the event recorder
+- **Debug Image Deletions**
+- **Debug Overlay** `(name in info_overlay_choices())`
+- **Debug Reaction Structure**: Checks the current reaction structure.
+- **Debug Reagents Cache**: Check which things are in the reaction cache.
+- **Debug Resource Cache**
+- **Debug Rewards**: For testing rewards on local servers.
+- **Debug Spawn**: Displays all the spawns that've happened so far or dies trying
+- **Del-All** `(typename as text)`: Delete all instances of the selected type.
+- **Del-Half** `(typename as text)`: Delete approximately half of instances of the selected type. *snap
+- **Delete landmarks**: Delete all landmarks of a specific type.
+- **Delete profiling logs**: Delete all saved profiling data, I hope you know what you're doing.
+- **Edit Main Loop Variables**
+- **Edit Market Variables**
+- **Edit Respawn Controller Variables**
+- **Edit Spawn Debug List**: Directly varedit the spawn debug list, edit its length to 0 to wipe it
+- **Edit Ticker Variables**
+- **Financial Info**: Shows budget variables and current market prices.
+- **Fix powernets**: Attempts for fix the powernets.
+- **Flock cheats**: Toggle cheats on or off on a particular flock
+- **HDM**: Toggle debug messages.
+- **Inspect Radio Frequencies**
+- **Machine Power stats**: Displays the statistics for how much power machines are using.
+- **Machine stats**: Displays the statistics for how machines are processed.
+- **Main Loop Context**: Displays the current main loop context information (lastproc: lasttask \[world.timeofday\])
+- **Main Loop Tick Detail**: Displays detailed tick information for the main loops that support it.
+- **Mass Flock Convert** `(force as num|null, radius as num|null, fancy as num|null)`: Convert a part of the area to flock
+- **persistent lag** `(cpu_usage as num)`: Makes it so lag is at least the set number.
+- **Queue stats**: Displays the statistics for how queue stuff is processed.
+- **Random Color Matrix Test**: Animates the client to a randomised color matrix
+- **Randomize Appearance**: Randomizes how you look (if you are a human)
+- **Randomize Handwriting**: Randomizes how you write on paper.
+- **Requisition Test**: Generates a specified requisition path and pins it to market.
+- **Show Runtime Window**: Shows the runtime window for yourself
+- **Temp. Deadmin Self**: Deadmin you're own self. Temporarily.
+- **Test Cinematic camera**: Test Cinematic camera
+- **Test Flock Panel**
+- **Test spacebee command** `(command as text)`: Run a discord/IRC bot command on the current server, omit the ;;. Local servers are considered server 0 for se
+- **Ticklag** `(number as null|num)`: Ticklag
+- **Toggle Force Blob**: If turned on, a blob will always appear in mixed, regardless of player count or probabilities.
+- **Toggle Force Wraith**: If turned on, a wraith will always appear in mixed or traitor, regardless of player count or probabilities.
+- **Upload Custom HUD Style**: Adds a dmi to the global list of available huds, for every player to use.
+- **View Global Variable** `(S as text)`
+- **View Ref Variables** `(ref as text)`: (reference) Enter a ref to view its variables
+- **View Runtimes**: View a detailed list of the runtimes during this round
+
+## Server
+
+- **AI: Add Law**
+- **AI: Bulk Law Change**
+- **AI: Law Reset**
+- **AI: Show Laws**
+- **Check Gamemode Stats**: Check the stats for the current gamemode
+- **Delay Round End**: Delay the server restart
+- **Delay Round Start**: Delay the game start
+- **Display Bomb Monitor**: Get a list of every canister- and tank-transfer bomb on station.
+- **Display Pregame HTML**: Tired of boring map gimmicks on the pregame screen? Try HTML!
+- **Force Drunk Mode** `(client/C in onlineAdmins)`: Is another admin drunk as a skunk? Put them in drunk mode sharpish.
+- **Game Panel**
+- **Info Overlay** `(name in info_overlay_choices())`
+- **Job Controls**
+- **Region Allocator**: Region Allocator front end panel. Allows you to dynamically allocate and deallocate areas of reserved space.
+- **Restart**: Restarts the world
+- **Set Conspiracy Objective**: Set a custom objective for all conspirators. Works fine in non-conspiracy modes.
+- **Set Nuke-Ops Scoreboard Values**: Manually assign values to the nuke ops win/loss scoreboard.
+- **Set Pod Wars Death Scoreboard Values**: Manually assign values to the Pod Wars Nanotrasen/Syndicate deaths scoreboard.
+- **Set Pod Wars Scoreboard Values**: Manually assign values to the Pod Wars Nanotrasen/Syndicate wins scoreboard.
+- **Show Loading Hint**: Show everyone a fun loading screen hint.
+- **Stabilize All Atmos**: Resets the air contents of THE ENTIRE STATION to normal.
+- **Stabilize Atmos**: Resets the air contents of every turf in view to normal.
+- **Start Now**: Start the round RIGHT NOW
+- **Toggle Hard Reboot**: A hard reboot is when the game instance outright ends, and the backend server reinitialises it
+- **Toggle Server Rebuild**: A server rebuild is when the backend server reinitialises the game container
+- **Unelectrify All Airlocks**: Removes all electrification from all airlocks in the game.
+- **View Special Role Popups**
+- **Wipe Nukie Boss Stats**: Wipe the intra-round stats of the nukeop commander's uplink purchases
+
+## Server Toggles
+
+- **Force De-Sussification**: Toggle behavior correction.
+- **Toggle Admin Sound Queue**: Toggle admin-played sounds waiting for previous sounds to finish before playing.
+- **Toggle AI**: People can't be AI
+- **Toggle AI VOX**: Grant or revoke AI access to VOX
+- **Toggle All Toggles**: Toggle All Toggles
+- **Toggle Antagonists Seeing Each Other**: Toggle all antagonists being able to see each other.
+- **Toggle Automatic Round End**: Toggle the round automatically ending in invasive round types.
+- **Toggle Blood System**: Toggle the blood system on or off.
+- **Toggle Bone System**: Toggle the bone system on or off.
+- **Toggle Dead OOC**: Toggle dis.
+- **Toggle Deadchat**: Toggle Deadchat on or off.
+- **Toggle Death Confetti**: Toggles the fun confetti effect and sound whenever a mob dies
+- **Toggle Emote Cooldowns**: Let everyone spam emotes, including farts/filps/suplexes. Oh no.
+- **Toggle Entering**: People can't enter
+- **Toggle Farting**: Toggle Farting on or off.
+- **Toggle Ghost Invisibility**: Toggle whether ghosts are invisible or not mid-round
+- **Toggle Global Flying Chat**: Makes mob chat show up in-game as floating text.
+- **Toggle Global Parallax**: Toggles parallax on or off globally. Toggling on respects client preferences in regard to parallax.
+- **Toggle IRCBot Debug**: Enables in-depth logging of all IRC Bot exports and returns
+- **Toggle Jump**: Toggle admin jumping
+- **Toggle Late Antagonists**: Toggle late joiners spawning as antagonists if all starting antagonists are dead.
+- **Toggle Literal Disarm**: Toggles literal disarm intent ON/OFF
+- **Toggle LOOC**: Toggle dis
+- **Toggle Manual Breathing/Blinking**: Toggle manual breathing and/or blinking.
+- **Toggle Map Voting**: Toggle whether map votes are allowed
+- **Toggle Monkeys Speaking Human**: Toggle monkeys being able to speak human.
+- **Toggle Music Announcements**: Toggle whether remotely-played music tracks are announced.
+- **Toggle Narrator Mode**: Toggle narrator mode on or off.
+- **Toggle next_click**: Removes most click delay. Don't know what this is? Probably shouldn't touch it.
+- **Toggle Night Mode**: Switch the station into night mode so the crew can rest and relax off-work.
+- **Toggle OOC**: Toggle dis
+- **Toggle Player Cap**: Toggle player cap
+- **Toggle Power Debug**: Toggle power debugging popups
+- **Toggle Pull Slowing**: Toggle whether pulling items should slow people down or not.
+- **Toggle Radio Audio**: Toggle whether record players and tape decks can play any audio
+- **Toggle Random Job Selection**: toggles random job rolling at the start of the round; preferences will be ignored. Has no effect on latejoins.
+- **Toggle Resource Cache**: Enable or disable the resource cache system
+- **Toggle Respawn**: Enable or disable the ability for all players to respawn
+- **Toggle Respawn Arena**: Lets ghosts go to the respawn arena to compete for a new life
+- **Toggle Revive**: Toggle admin revives
+- **Toggle Sims Mode**: Enable sims mode for this round.
+- **Toggle Sound Playing**: Toggle admin sound playing
+- **Toggle SoundPref Override**: Force people to hear admin-played sounds even if they have them disabled.
+- **Toggle Spawn**: Toggle admin spawning
+- **Toggle Spooky Light Mode**: toggle thresholded lighting plane
+- **Toggle Station Name Changing**: Toggle station name changing on or off.
+- **Toggle Suicide**: Allow/Disallow people to commit suicide.
+- **Toggle Toggles**: Toggles toggles ON/OFF
+- **Toggle Tracy Profiling**: Toggle Tracy profiling on the next round
+- **Toggle Traitor Scaling**: Toggle traitor scaling
+- **Toggle Tutorial Enabled**: Toggle whether people can start the tutorial
+- **Toggle VPN Blacklist**: Toggle the ability for new players to connect through a VPN or proxy server
+- **Toggle Waddle Walking**: Toggle waddle walking on or off.
+- **Toggle Whitelist**: Toggle the server whitelist on or off
+- **Toggle whitelisted mentors**: Toggle if Mentors bypass the whitelist
+
+## Not in a tab (command line, menus)
+
+- **Add Reagent** `(atom/A in world)`
+- **Add to Screen** `(atom/A as obj|mob|turf in world)`: Add a thing to some poor sod's screen.
+- **Admin PM** `(mob/M as mob in world)`
+- **Anvil Gib** `(mob/M as mob in world, height = 7 as num|null, anvil_type = /obj/table)`
+- **Butt Gib** `(mob/M as mob in world)`
+- **Check Health** `(atom/target as null|mob in world)`: Checks the health of someone.
+- **Check Reagents** `(atom/target as null|mob|obj|turf in world)`: Checks the reagents of something.
+- **Clear Area Overlays**
+- **Clownify** `(mob/living/M as mob in world)`
+- **Cluwne Gib** `(mob/M as mob in world)`: Summon the fearsome floor cluwne...
+- **command help**: gets the desc of a verb, if it has one
+- **Copy Cloud Data** `(old_key as null|text)`: Copy cloud saves from one account to another. This WILL overwrite all saves on the target account.
+- **Copy Medals** `(old_key as null|text, new_key as null|text)`: Copy medals from one account to another.
+- **Damn** `(mob/M as mob in world)`: Darn them right to heck
+- **Delete All JS Logfiles**: Delete all logfiles for JS error reporting. Be extra sure you want to do this!
+- **Delete JS Logfile** `(fileName as text)`: Delete a logfile for JS error reporting. Be sure you want to do this!
+- **Drop Everything** `(mob/M as mob in world)`
+- **Elec Gib** `(mob/M as mob in world)`
+- **Fire Gib** `(mob/M as mob in world)`
+- **Get Mob** `(mob/M in world)`: Mob to teleport
+- **Get Thing** `(atom/target as mob|obj in world)`: Gets either a mob or an object, bringing it right to you! Wow!
+- **Get Thing (Location)** `(atom/target as mob|obj in world)`: Gets either a mob or an object, bringing it right to your loc! Wow!
+- **Ghostdrone All**: Makes every single person a ghostdrone. Why are you doing this.
+- **Gib** `(mob/M as mob in world)`
+- **Give Mass Medals** `(medal as null|text)`: Give a bunch of players a medal. Don't use this while any of them are online please lol.
+- **Gold Gib** `(mob/M as mob in world)`
+- **Gravity Gib** `(mob/M as mob in world)`
+- **Haine Blood Debug**: Toggle blood debug messages.
+- **Heal** `(mob/M as mob in world)`
+- **Humanize** `(mob/M in world)`
+- **Ice Gib** `(mob/M as mob in world)`
+- **idclip**
+- **iddqd**
+- **iddt**
+- **idkfa**
+- **Implode Gib** `(mob/M as mob in world)`
+- **JTC** `(x = 1 as num, y = 1 as num, z = 1 as num)`
+- **JTK** `(client/ckey in clients)`
+- **JTM** `(mob/M in world)`
+- **JTT** `(turf/T in world)`
+- **Jump to Mob** `(mob/M in world)`
+- **Jump To Turf** `(turf/T in world)`
+- **Make AI** `(mob/M in world)`
+- **Make Cyborg** `(mob/M in world)`
+- **Make Ghostdrone** `(mob/M in world)`
+- **Manage Abilities** `(mob/M in mobs)`: Select a mob to manage its abilities.
+- **Manage Bioeffects** `(mob/M in mobs)`: Select a mob to manage its bioeffects.
+- **Map World** `(automated = FALSE)`: Takes a series of screenshots for mapping
+- **Mobile AIize** `(mob/M in world)`
+- **Mute Permanently** `(mob/M as mob in world)`
+- **Mute Temporarily** `(mob/M as mob in world)`
+- **ONP**
+- **OOC (Un)Ban**: Ban or unban a player from using OOC
+- **ORP**
+- **Owl Gib** `(mob/M as mob in world)`
+- **Party Gib** `(mob/M as mob in world)`
+- **Plain Message** `(mob/M as mob in world)`
+- **Player Options** `(mob/M as mob in world)`
+- **POK** `(client/ckey in clients)`: Open the player options panel for a key.
+- **Polymorph Player** `(mob/M as mob in world)`: Futz with a human mob's DNA.
+- **POM** `(mob/M in mobs)`: Open the player options panel for a selected mob.
+- **Prison** `(mob/M as mob in world)`
+- **RAS**
+- **Revive All Bees**
+- **Revive All Cats**
+- **Revive All Parrots**
+- **Secrets**
+- **Send Mob** `(mob/M in world, area/A in world)`
+- **Set lobby titlecard**
+- **Shark Ban** `(mob/sharktarget as mob in world)`
+- **Shark Gib** `(mob/sharktarget as mob in world)`
+- **Show Player Computer IDs**
+- **Show Player IPs**
+- **Show Player Stats**
+- **Show Rules to Player** `(mob/M as mob in world, rp_rules=FALSE)`
+- **Smite** `(mob/M as mob)`
+- **Spawn** `(object as text)`: (atom path) Spawn an atom
+- **Spawn-Demonically** `(obj/object as text)`: (object path) Spawn an object. But all fancy-like
+- **Spawn-Figurine** `(figurine as text)`: Spawn a figurine
+- **Spawn-Heavenly** `(obj/object as text)`: (object path) Spawn an object. But all fancy-like
+- **Spawn-Supplydrop** `(obj/object as text)`: (object path) Spawn an object. But all fancy-like
+- **spawn_survival_shit**: spawn_survival_shit.
+- **Spider Gib** `(mob/M as mob in world)`
+- **Subtle Message** `(mob/M as mob in world)`
+- **Tyson Gib** `(mob/tysontarget as mob in world)`
+- **UnDamn** `(mob/M as mob in world)`: Un-Darn them right out of heck
+- **unhandcuff player** `(mob/M as mob in world)`: take someone's handcuffs off!
+- **Upload Uncool Words**: Upload a JSON file for the uncool words list
+- **View Admin Forensics** `(obj/O as obj in world)`
+- **View Variables** `(datum/D in world)`
+- **Warn** `(mob/M in world)`: Warn a player
+- **WireTest**

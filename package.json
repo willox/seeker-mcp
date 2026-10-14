@@ -1,0 +1,15 @@
+{
+  "name": "seeker-tunnel",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "description": "Local proxy for the hosted seeker MCP server: MCP on stdio to one WebSocket, plus the TCP connections and files you allow",
+  "repository": "github:willox/seeker-mcp",
+  "type": "module",
+  "scripts": {
+    "login": "node seeker-tunnel.mjs login",
+    "logout": "node seeker-tunnel.mjs logout"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
